@@ -3,17 +3,30 @@ import * as faceapi from "face-api.js";
 import "./App.css";
 
 function App() {
-  const startCamera = () => {
+  const startCamera = async () => {
     const video = document.getElementById("video");
-
-    navigator.getUserMedia(
-      {
-        video: {},
-      },
-      (stream) => (video.srcObject = stream),
-      (err) => console.log(err)
-    );
+  
+    try {
+      // Get all video devices
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+      
+      // Choose the external webcam (for example, the second device in the list)
+      console.log(videoDevices.length);
+      const externalWebcam = videoDevices[0];  // Adjust this based on the index of your external webcam
+      console.log(JSON.stringify(externalWebcam));
+      // Get user media from the selected device
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: externalWebcam.deviceId },
+      });
+      
+      video.srcObject = stream;
+    } catch (err) {
+      console.log("Error accessing the camera: ", err);
+    }
   };
+  
+  
 
   useEffect(() => {
     const fetchModels = async () => {
