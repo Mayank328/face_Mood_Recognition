@@ -1,9 +1,9 @@
 import React from 'react';
-import Live_mood_detection from './components/Live_mood_detection'
+import Start_page from './components/Start_page';
 function App() {
   return (
     <div className="App">
-      <Live_mood_detection/>
+      <Start_page/>
     </div>
   );
 }
